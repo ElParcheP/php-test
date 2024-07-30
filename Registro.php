@@ -12,22 +12,29 @@ if ($db_connection->connect_error) {
     die('No se ha podido conectar a la base de datos: ' . $db_connection->connect_error);
 }
 
+// Obtiene los datos de forma segura
 $subs_name = $db_connection->real_escape_string($_POST['nombre']);
 $subs_last = $db_connection->real_escape_string($_POST['apellido']);
 $subs_email = $db_connection->real_escape_string($_POST['email']);
 
-$resultado = $db_connection->query("SELECT * FROM `$db_table_name` WHERE `Email` = '$subs_email'");
+// Consulta
+$resultado = $db_connection->query("SELECT * FROM `$db_table_name` WHERE `email` = '$subs_email'");
 
+// Si obtiene almenos una coincidencia
 if ($resultado->num_rows > 0) {
     header('Location: Fail.html');
     exit();
-} else {
-    $insert_value = $db_connection->prepare("INSERT INTO `$db_table_name` (`Nombre`, `Apellido`, `Email`) VALUES (?, ?, ?)");
+} else { // Si no
+    // Consulta para insertar
+    $insert_value = $db_connection->prepare("INSERT INTO `$db_table_name` (`username`, `last_name`, `email`) VALUES (?, ?, ?)");
+    // Pasa los datos del formulario como parametros de la consulta
     $insert_value->bind_param('sss', $subs_name, $subs_last, $subs_email);
     
+    // Si lo ejecuta correctamente
     if ($insert_value->execute()) {
         header('Location: Success.html');
     } else {
+        // manda error
         die('Error: ' . $db_connection->error);
     }
     
