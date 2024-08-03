@@ -1,0 +1,12 @@
+{
+  "version": "7.4", // O la versión de PHP que necesites
+  "document_root": ".", // La carpeta donde está tu index.php, en este caso, la raíz
+  "extensions": ["pdo_mysql"], // Extensiones que necesitas, ajusta según tus necesidades
+  "app": {
+    "php": {
+      "server": {
+        "document_root": "."
+      }
+    }
+  }
+}
